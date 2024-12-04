@@ -6,7 +6,8 @@ from aws_cdk import (
     aws_s3 as s3,
     aws_lambda as _lambda,
     aws_dynamodb as dynamodb,
-    RemovalPolicy
+    RemovalPolicy,
+    Stage  # Import Stage from aws_cdk
 )
 from constructs import Construct
 
@@ -81,11 +82,9 @@ class MyPipelineStack(Stack):
         # Add stages to the pipeline
         pipeline.add_stage(Prog8860Stage(self, "Deploy"))
 
-class Prog8860Stage(pipelines.Stage):
-
+class Prog8860Stage(Stage):  # Use Stage from aws_cdk
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-
         Prog8860Stack(self, "Prog8860Stack")
 
 app = App()
