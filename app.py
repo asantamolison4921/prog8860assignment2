@@ -2,14 +2,14 @@ from aws_cdk import (
     App,
     Stack,
     pipelines,
-    aws_codepipeline as codepipeline,
+    aws_codepipeline as codepipeline,  # Import aws_codepipeline
     aws_codepipeline_actions as cpactions,
     aws_s3 as s3,
     aws_lambda as _lambda,
     aws_dynamodb as dynamodb,
     RemovalPolicy,
-    Stage,
-    SecretValue
+    Stage,  # Import Stage from aws_cdk
+    SecretValue  # Import SecretValue from aws_cdk
 )
 from constructs import Construct
 
@@ -46,22 +46,22 @@ class MyPipelineStack(Stack):
         super().__init__(scope, id, **kwargs)
 
         # Define the source action
-        source_output = codepipeline.Artifact()
+        source_output = codepipeline.Artifact()  # Use aws_codepipeline.Artifact
         source_action = cpactions.GitHubSourceAction(
             action_name="GitHub_Source",
             owner="asantamolison4921",
             repo="prog8860assignment2",
             output=source_output,
             branch="main",
-            oauth_token=SecretValue.secrets_manager("prog8860assignment2token")
+            oauth_token=SecretValue.secrets_manager("prog8860assignment2token")  # Use your GitHub token
         )
 
         # Define the build action
-        build_output = codepipeline.Artifact()
+        build_output = codepipeline.Artifact()  # Use aws_codepipeline.Artifact
         build_action = cpactions.CodeBuildAction(
             action_name="CodeBuild",
             project=pipelines.CodeBuildStep("BuildProject",
-                                            input=source_output,
+                                            input=source_output,  # Ensure input is provided
                                             commands=[
                                                 "npm install -g aws-cdk",
                                                 "pip install -r requirements.txt",
@@ -85,7 +85,7 @@ class MyPipelineStack(Stack):
         # Add stages to the pipeline
         pipeline.add_stage(Prog8860Stage(self, "Deploy"))
 
-class Prog8860Stage(Stage):
+class Prog8860Stage(Stage):  # Use Stage from aws_cdk
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
         Prog8860Stack(self, "Prog8860Stack")
