@@ -21,7 +21,7 @@ class Prog8860Stack(Stack):
         # Create S3 Bucket
         s3.Bucket(self,
                   "MyBucket",
-                  bucket_name="prog8860assign2alfred",
+                  bucket_name="prog8860assign2alfred2",
                   versioned=True,
                   removal_policy=RemovalPolicy.DESTROY)
 
