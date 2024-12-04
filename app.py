@@ -49,7 +49,7 @@ class MyPipelineStack(Stack):
         source_action = pipelines.CodePipelineSource.git_hub(
             "asantamolison4921/prog8860assignment2",
             "main",
-            authentication=SecretValue.secrets_manager("prog8860assignment2token")
+            authentication=SecretValue.secrets_manager("prog8860assignment2token2", json_field="prog8860assignment2token2")
         )
 
         # Define the build action
