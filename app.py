@@ -46,7 +46,7 @@ class MyPipelineStack(Stack):
         super().__init__(scope, id, **kwargs)
 
         # Define the source action
-        source_action = pipelines.CodePipelineSource.gitHub(
+        source_action = pipelines.CodePipelineSource.git_hub(
             "asantamolison4921/prog8860assignment2",
             "main",
             authentication=SecretValue.secrets_manager("prog8860assignment2token")
