@@ -46,36 +46,28 @@ class MyPipelineStack(Stack):
         super().__init__(scope, id, **kwargs)
 
         # Define the source action
-        source_output = codepipeline.Artifact()  # Use aws_codepipeline.Artifact
-        source_action = cpactions.GitHubSourceAction(
-            action_name="GitHub_Source",
-            owner="asantamolison4921",
-            repo="prog8860assignment2",
-            output=source_output,
-            branch="main",
-            oauth_token=SecretValue.secrets_manager("prog8860assignment2token")  # Use your GitHub token
+        source_action = pipelines.CodePipelineSource.gitHub(
+            "asantamolison4921/prog8860assignment2",
+            "main",
+            authentication=SecretValue.secrets_manager("prog8860assignment2token")
         )
 
         # Define the build action
-        build_output = codepipeline.Artifact()  # Use aws_codepipeline.Artifact
-        build_action = cpactions.CodeBuildAction(
-            action_name="CodeBuild",
-            project=pipelines.CodeBuildStep("BuildProject",
-                                            input=source_output,  # Ensure input is provided
-                                            commands=[
-                                                "npm install -g aws-cdk",
-                                                "pip install -r requirements.txt",
-                                                "cdk synth"
-                                            ]),
-            input=source_output,
-            outputs=[build_output]
+        build_action = pipelines.CodeBuildStep(
+            "BuildProject",
+            input=source_action,
+            commands=[
+                "npm install -g aws-cdk",
+                "pip install -r requirements.txt",
+                "cdk synth"
+            ]
         )
 
         # Define the pipeline
         pipeline = pipelines.CodePipeline(self, "Pipeline",
                                           pipeline_name="MyPipeline",
                                           synth=pipelines.ShellStep("Synth",
-                                                                    input=source_output,
+                                                                    input=source_action,
                                                                     commands=[
                                                                         "npm install -g aws-cdk",
                                                                         "pip install -r requirements.txt",
