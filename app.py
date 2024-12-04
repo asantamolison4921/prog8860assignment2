@@ -2,6 +2,7 @@ from aws_cdk import (
     App,
     Stack,
     pipelines,
+    aws_codepipeline as codepipeline,  # Import aws_codepipeline
     aws_codepipeline_actions as cpactions,
     aws_s3 as s3,
     aws_lambda as _lambda,
@@ -44,7 +45,7 @@ class MyPipelineStack(Stack):
         super().__init__(scope, id, **kwargs)
 
         # Define the source action
-        source_output = pipelines.Artifact()
+        source_output = codepipeline.Artifact()  # Use aws_codepipeline.Artifact
         source_action = cpactions.GitHubSourceAction(
             action_name="GitHub_Source",
             owner="asantamolison4921",
@@ -54,7 +55,7 @@ class MyPipelineStack(Stack):
         )
 
         # Define the build action
-        build_output = pipelines.Artifact()
+        build_output = codepipeline.Artifact()  # Use aws_codepipeline.Artifact
         build_action = cpactions.CodeBuildAction(
             action_name="CodeBuild",
             project=pipelines.CodeBuildStep("BuildProject",
